@@ -1,5 +1,5 @@
 PWD := $(shell pwd)
-ALL_OBJS := work_queue.o
+ALL_OBJS := timer.o
 MODULE_NAME := demo_workqueue
 
 $(MODULE_NAME)-y += $(ALL_OBJS)
