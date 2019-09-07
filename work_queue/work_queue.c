@@ -24,6 +24,8 @@ static void demo_workqueue_func(struct work_struct *work)
 	set_current_state(TASK_INTERRUPTIBLE);
 	schedule_timeout(1 * HZ);
 	printk(KERN_INFO "[work]=>data is: %s\n", temp_work->str);
+
+	return ;
 }
 
 static int __init demo_init(void)
@@ -48,7 +50,7 @@ err:
 	if (demo_workqueue)
 		kfree(demo_workqueue);
 
-	return 0;
+	return -1;
 }
 
 static void __exit demo_exit(void)
