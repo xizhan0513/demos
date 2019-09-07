@@ -1,68 +1,66 @@
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/time.h>
 
-#include <linux/jiffies.h>
-#include <linux/workqueue.h>
-#include <linux/slab.h> //kmalloc kfree
-
+#include <linux/slab.h>		//kmalloc kfree
 #include <linux/sched.h>
 #include <linux/delay.h>
+#include <linux/workqueue.h>
 
-int count = 10;
-static char data[] = "test for work queue";
-
-struct work_ctx {
+struct workqueue_ctx {
 	struct work_struct real_work;
-	char *str;
-	int arg;
+	char               *str;
 };
 
-struct work_ctx *demo_work;
+struct workqueue_ctx *demo_workqueue;
+static int count = 10;
+static char data[] = "test for work queue";
 
-static void demo_work_func(struct work_struct *work) {
-	struct work_ctx *temp_work = container_of(work, struct work_ctx, real_work);
+static void demo_workqueue_func(struct work_struct *work)
+{
+	struct workqueue_ctx *temp_work = container_of(work, struct workqueue_ctx, real_work);
 	printk(KERN_INFO "[work]=> PID: %d; NAEM: %s\n", current->pid, current->comm);
 	printk(KERN_INFO "[work]=> sleep 1 seconds\n");
+	/* 设置当前进程处于等待队列中，等待资源有效时唤醒 */
 	set_current_state(TASK_INTERRUPTIBLE);
 	schedule_timeout(1 * HZ);
-	printk(KERN_INFO "[work]=>data is: %d %s\n", temp_work->arg, temp_work->str);
+	printk(KERN_INFO "[work]=>data is: %s\n", temp_work->str);
 }
 
-static int __init demo_thread_init(void)
+static int __init demo_init(void)
 {
-	demo_work = kmalloc(sizeof(*demo_work), GFP_KERNEL);
-	if (demo_work == NULL) {
-		printk("%s: malloc failed\n", __func__);
+	demo_workqueue = kmalloc(sizeof(*demo_workqueue), GFP_KERNEL);
+	if (demo_workqueue == NULL) {
+		printk("%s: malloc failed in %d lines!\n", __func__, __LINE__);
 		goto err;
 	}
 
-	INIT_WORK(&demo_work->real_work, demo_work_func);
-	demo_work->str = data;
+	INIT_WORK(&demo_workqueue->real_work, demo_workqueue_func);
+	demo_workqueue->str = data;
+
 	while (count--) {
 		msleep(5000);
-		demo_work->arg = count;
-		schedule_work(&demo_work->real_work);
+		schedule_work(&demo_workqueue->real_work);
 	}
 
 	return 0;
 
 err:
-	if (demo_work)
-		kfree(demo_work);
+	if (demo_workqueue)
+		kfree(demo_workqueue);
 
 	return 0;
 }
 
-static void __exit demo_thread_exit(void)
+static void __exit demo_exit(void)
 {
-	flush_work(&demo_work->real_work);
-	kfree(demo_work);
+	flush_work(&demo_workqueue->real_work);
+	kfree(demo_workqueue);
 	return ;
 }
 
-module_init(demo_thread_init);
-module_exit(demo_thread_exit);
+module_init(demo_init);
+module_exit(demo_exit);
 module_param(count, int, 0644);
+MODULE_PARM_DESC(count, "Work queue scheduling times");
 
 MODULE_LICENSE("GPL");
