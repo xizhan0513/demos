@@ -8,3 +8,4 @@ modules.order
 *.ko
 .tmp_versions
 .cache.mk
+*.swp
