@@ -21,7 +21,7 @@ int main()
 	char str_fd[8];
 	pid_t pid = getpid();
 
-	fd = open("server.pid", O_WRONLY);
+	fd = open("server.pid", O_WRONLY | O_CREAT, 0666);
 	if (fd < 0) {
 		perror("open:");
 		return -1;
