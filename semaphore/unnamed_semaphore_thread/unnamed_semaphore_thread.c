@@ -58,7 +58,7 @@ int main()
 	}
 
 	pthread_join(pid_1, NULL);
-	pthread_join(pid_1, NULL);
+	pthread_join(pid_2, NULL);
 
 	return 0;
 }
