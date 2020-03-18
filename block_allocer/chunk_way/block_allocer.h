@@ -5,7 +5,7 @@ struct node {
 	struct node *next;
 };
 
-typedef struct demo_pool {
+typedef struct demo_pool_t {
 	unsigned int      block_size;
 	unsigned int      block_number;
 	char             *buffer;
@@ -14,11 +14,11 @@ typedef struct demo_pool {
 	int               alloc_count;
 	int               free_count;
 	struct node      *chunk;
-} demo_pool;
+} demo_pool_t;
 
-demo_pool *demo_pool_create(unsigned int block_size, unsigned int block_number, char *buffer);
-void *demo_pool_alloc(demo_pool *pool, unsigned int size);
-void demo_pool_free(demo_pool *pool, void *buffer);
-void demo_pool_destory(demo_pool *pool);
+demo_pool_t *demo_pool_create(unsigned int block_size, unsigned int block_number, char *buffer);
+void *demo_pool_alloc(demo_pool_t *pool, unsigned int size);
+void demo_pool_free(demo_pool_t *pool, void *buffer);
+void demo_pool_destory(demo_pool_t *pool);
 
 #endif

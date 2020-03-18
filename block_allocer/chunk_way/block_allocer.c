@@ -4,22 +4,22 @@
 
 #include "block_allocer.h"
 
-demo_pool *demo_pool_create(unsigned int block_size, unsigned int block_number, char *buffer)
+demo_pool_t *demo_pool_create(unsigned int block_size, unsigned int block_number, char *buffer)
 {
 	int i;
 	int mem_size = block_size * block_number;
-	demo_pool *pool;
+	demo_pool_t *pool;
 	struct node *chunk;
 
 	if (buffer == NULL) {
-		pool = (demo_pool *)malloc(sizeof(demo_pool) + mem_size);
+		pool = (demo_pool_t *)malloc(sizeof(demo_pool_t) + mem_size);
 		if (!pool) {
 			return NULL;
 		}
 
-		pool->buffer = (char *)pool + sizeof(demo_pool);
+		pool->buffer = (char *)pool + sizeof(demo_pool_t);
 	} else {
-		pool = (demo_pool *)malloc(sizeof(demo_pool));
+		pool = (demo_pool_t *)malloc(sizeof(demo_pool_t));
 		if (!pool) {
 			return NULL;
 		}
@@ -47,7 +47,7 @@ demo_pool *demo_pool_create(unsigned int block_size, unsigned int block_number, 
 	return pool;
 }
 
-void *demo_pool_alloc(demo_pool *pool, unsigned int size)
+void *demo_pool_alloc(demo_pool_t *pool, unsigned int size)
 {
 	char *mem = NULL;
 
@@ -73,7 +73,7 @@ void *demo_pool_alloc(demo_pool *pool, unsigned int size)
 	return mem;
 }
 
-void demo_pool_free(demo_pool *pool, void *buffer)
+void demo_pool_free(demo_pool_t *pool, void *buffer)
 {
 	struct node *chunk = (struct node *)buffer;
 	char *mem = (char *)buffer;
@@ -99,7 +99,7 @@ void demo_pool_free(demo_pool *pool, void *buffer)
 	return ;
 }
 
-void demo_pool_destory(demo_pool *pool)
+void demo_pool_destory(demo_pool_t *pool)
 {
 	if (pool) {
 		free(pool);
