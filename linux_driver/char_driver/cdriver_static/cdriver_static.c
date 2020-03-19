@@ -49,7 +49,6 @@ static int __init cdriver_init(void)
 
 	cdev_init(&cdev, &cdriver_fops);
 	cdev.owner = THIS_MODULE;
-	cdev.ops   = &cdriver_fops;
 
 	cdev_add(&cdev, cdevno, 1);
 
@@ -61,7 +60,7 @@ static int __init cdriver_init(void)
 
 static void __exit cdriver_exit(void)
 {
-	cdev_del(&cdev),
+	cdev_del(&cdev);
 	unregister_chrdev_region(cdevno, 1);
 	printk("cdriver demo module exit!\n");
 
