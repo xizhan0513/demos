@@ -1,0 +1,7 @@
+&demo {
+	demo: demo@0 {
+		compatible = "demo_use_dtsCompatible";
+		reg        = <0x12345678>;
+		/* TODO */
+	};
+};
