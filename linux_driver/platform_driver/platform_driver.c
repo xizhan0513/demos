@@ -8,6 +8,27 @@ int demo_probe(struct platform_device *pdev)
 	/* 2、cdev初始化注册 */
 	/* 3、从pdev读出硬件资源 */
 	/* 4、对硬件资源的初始化 */
+
+#if 0
+	int irq = 0;
+	irq = platform_get_irq(pdev, 0);
+	if (irq) {
+		irq = 13;
+	}
+
+	struct resource *res = NULL;
+	res = platform_get_resource(pdev, 0);
+	if (res) {
+		res->start = 0x12345678;
+		res->end   = 0x12345678 + 0x100;
+		res->flags = IORESOURCE_MEM;
+		res->name  = "/demo_var" or "demo_reg_names";
+	}
+
+	struct resource *res = NULL;
+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "demo_reg_names");
+#endif
+
 	printk("%s\n", __func__);
 
 	return 0;
