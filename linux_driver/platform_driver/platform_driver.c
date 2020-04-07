@@ -10,23 +10,45 @@ int demo_probe(struct platform_device *pdev)
 	/* 4、对硬件资源的初始化 */
 
 #if 0
-	int irq = 0;
-	irq = platform_get_irq(pdev, 0);
-	if (irq) {
-		irq = 13;
+	int irqno = 0;
+	irqno = platform_get_irq(pdev, 0);
+	if (irqno < 0) {
+		printk("platform_get_irq failed!\n");
+	} else {
+		printk("irq number = %d\n", irqno);
 	}
+#endif
 
-	struct resource *res = NULL;
-	res = platform_get_resource(pdev, 0);
+#if 0
+	int irqno = 0;
+	irqno = platform_get_irq_byname(pdev, "demo_int_name"); /* 如果设备树没有定义interrupt-names */
+	if (irqno < 0) {                                        /* 则使用节点的路径代替，即"/demo_var" */
+		printk("platform_get_irq_byname failed!\n");
+	} else {
+		printk("irq number = %d\n", irqno);
+	}
+#endif
+
+#if 0
+	struct resource *res;
+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0); /* 如果是IORESOURCE_IRQ,则res->start是中断号 */
 	if (res) {
-		res->start = 0x12345678;
-		res->end   = 0x12345678 + 0x100;
-		res->flags = IORESOURCE_MEM;
-		res->name  = "/demo_var" or "demo_reg_names";
+		printk("start = %#x\n", res->start);
+		printk("end   = %#x\n", res->end);
+		printk("flags = %lu\n", res->flags);
+		printk("name  = %s\n",  res->name);
 	}
+#endif
 
-	struct resource *res = NULL;
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "demo_reg_names");
+#if 0
+	struct resource *res;
+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "demo_reg_name");
+	if (res) {
+		printk("start = %#x\n", res->start);
+		printk("end   = %#x\n", res->end);
+		printk("flags = %lu\n", res->flags);
+		printk("name  = %s\n",  res->name);
+	}
 #endif
 
 	printk("%s\n", __func__);

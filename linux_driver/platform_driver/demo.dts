@@ -1,9 +1,10 @@
 / {
 	demo: demo_var {
-		compatible = "demo_use_dtsCompatible";
-		reg        = <0x12345678 0x100>;
-		reg-names  = "demo_reg_names";
-		interrupts = <13>;	
+		compatible      = "demo_use_dtsCompatible";
+		reg             = <0x12345678 0x100>;
+		reg-names       = "demo_reg_name";
+		interrupts      = <13>;
+		interrupt-names = "demo_int_name";
 		/* TODO */
 	};
 };
